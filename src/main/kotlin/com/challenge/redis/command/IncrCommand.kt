@@ -7,7 +7,6 @@ import com.challenge.redis.service.DataService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.lang.NumberFormatException
-import kotlin.ClassCastException
 
 @Component
 class IncrCommand : Command {
@@ -17,9 +16,9 @@ class IncrCommand : Command {
 
     override fun execute(request: ParamsRequest): ResultResponse {
         if (request.options.isNotEmpty()){
-            var key = request.options[0]
+            val key = request.options[0]
             if (dataService.existData(key)){
-                var content = dataService.getData(key)
+                val content = dataService.getData(key)
                 var increment = 0
                 try {
                     increment = content.value.toInt() + 1

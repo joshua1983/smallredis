@@ -8,16 +8,18 @@ import java.util.concurrent.ConcurrentHashMap
 class DataService {
 
     fun insertData(key: String, value: String){
-        var data = this.getAllData()
-        data.put(key, Content(
-            value = value,
-            timestamp = System.currentTimeMillis(),
-            expire = -1
-        ))
+        val data = this.getAllData()
+        synchronized(this){
+            data.put(key, Content(
+                value = value,
+                timestamp = System.currentTimeMillis(),
+                expire = -1
+            ))
+        }
     }
 
     fun insertData(key: String, value: String, expire: Int){
-        var data = this.getAllData()
+        val data = this.getAllData()
         synchronized(this){
             data.put(key, Content(
                 value = value,
@@ -28,7 +30,7 @@ class DataService {
     }
 
     fun removeData(key: String){
-        var data = this.getAllData()
+        val data = this.getAllData()
         data.remove(key)
     }
 

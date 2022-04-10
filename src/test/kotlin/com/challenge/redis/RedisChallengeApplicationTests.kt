@@ -19,159 +19,159 @@ class RedisChallengeApplicationTests {
 
     @Test
     fun testSet() {
-        var valueToSet = "data"
-        var keyToSet = "key"
-        var listParams = listOf(keyToSet, valueToSet)
-        var paramsRequest = ParamsRequest(listParams)
+        val valueToSet = "data"
+        val keyToSet = "key"
+        val listParams = listOf(keyToSet, valueToSet)
+        val paramsRequest = ParamsRequest(listParams)
         processCommand.processCommand("SET", paramsRequest)
-        var datos = dataService.getAllData()
+        val datos = dataService.getAllData()
         Assert.assertNotNull(datos.get(keyToSet))
         Assert.assertEquals(datos.get(keyToSet)?.value, valueToSet)
     }
 
     @Test
     fun testSetdWithEXpireTime() {
-        var keyToSet = "key"
-        var valueToSet = "data"
-        var expireSeconds = "2"
-        var listParams = listOf(keyToSet, valueToSet, "EX", expireSeconds)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestGet = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSet = "data"
+        val expireSeconds = "2"
+        val listParams = listOf(keyToSet, valueToSet, "EX", expireSeconds)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestGet = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("SET", paramsRequestSet)
         Thread.sleep(2001)
-        var datos = processCommand.processCommand("GET", paramsRequestGet)
+        val datos = processCommand.processCommand("GET", paramsRequestGet)
         Assert.assertTrue(datos.response.equals("El dato ya expiró"))
     }
 
     @Test
     fun testSetdWithEXpireTimeLessLimit() {
-        var keyToSet = "key"
-        var valueToSet = "data"
-        var expireTime = "20"
-        var listParams = listOf(keyToSet, valueToSet, "EX", expireTime)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestGet = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSet = "data"
+        val expireTime = "20"
+        val listParams = listOf(keyToSet, valueToSet, "EX", expireTime)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestGet = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("SET", paramsRequestSet)
-        var datos = processCommand.processCommand("GET", paramsRequestGet)
+        val datos = processCommand.processCommand("GET", paramsRequestGet)
         Assert.assertTrue(datos.response.equals(valueToSet))
     }
 
     @Test
     fun testGet() {
-        var keyToSet = "key"
-        var valueToSet = "data"
-        var listParams = listOf(keyToSet, valueToSet)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestGet = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSet = "data"
+        val listParams = listOf(keyToSet, valueToSet)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestGet = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("SET", paramsRequestSet)
-        var datos = processCommand.processCommand("GET", paramsRequestGet)
+        val datos = processCommand.processCommand("GET", paramsRequestGet)
         Assert.assertTrue(datos.response.equals(valueToSet))
     }
 
     @Test
     fun testDel() {
-        var keyToSet = "key"
-        var valueToSet = "data"
-        var listParams = listOf(keyToSet, valueToSet)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestDel = ParamsRequest(listOf(keyToSet))
-        var paramsRequestGet = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSet = "data"
+        val listParams = listOf(keyToSet, valueToSet)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestDel = ParamsRequest(listOf(keyToSet))
+        val paramsRequestGet = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("SET", paramsRequestSet)
         processCommand.processCommand("DEL", paramsRequestDel)
-        var datos = processCommand.processCommand("GET", paramsRequestGet)
+        val datos = processCommand.processCommand("GET", paramsRequestGet)
         Assert.assertTrue(datos.response.equals("No existe un item con esa llave."))
     }
 
     @Test
     fun testDbSize() {
-        var keyToSet = "key"
-        var valueToSet = "data"
-        var listParams = listOf(keyToSet, valueToSet)
-        var paramsRequestSet = ParamsRequest(listParams)
+        val keyToSet = "key"
+        val valueToSet = "data"
+        val listParams = listOf(keyToSet, valueToSet)
+        val paramsRequestSet = ParamsRequest(listParams)
         processCommand.processCommand("SET", paramsRequestSet)
-        var datos = processCommand.processCommand("DBSIZE", ParamsRequest(listOf()))
+        val datos = processCommand.processCommand("DBSIZE", ParamsRequest(listOf()))
         Assert.assertTrue(datos.response.equals("1"))
     }
 
     @Test
     fun testIncrementValueINCR() {
-        var keyToSet = "key"
-        var valueToSet = "0"
-        var listParams = listOf(keyToSet, valueToSet)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestIncr = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSet = "0"
+        val listParams = listOf(keyToSet, valueToSet)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestIncr = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("SET", paramsRequestSet)
-        var datos = processCommand.processCommand("INCR", paramsRequestIncr)
+        val datos = processCommand.processCommand("INCR", paramsRequestIncr)
         Assert.assertTrue(datos.response.equals("1"))
     }
 
     @Test
     fun testIncrementValueINCRnonIntegerValue() {
-        var keyToSet = "key"
-        var valueToSet = "data"
-        var listParams = listOf(keyToSet, valueToSet)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestIncr = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSet = "data"
+        val listParams = listOf(keyToSet, valueToSet)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestIncr = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("SET", paramsRequestSet)
-        var datos = processCommand.processCommand("INCR", paramsRequestIncr)
+        val datos = processCommand.processCommand("INCR", paramsRequestIncr)
         Assert.assertTrue(datos.response.equals("0"))
     }
 
     @Test
     fun testAddMultipleScoresZADD() {
-        var keyToSet = "key"
-        var valueToSetIndex1 = "1"
-        var valueToSetValue1 = "data"
-        var valueToSetIndex2 = "2"
-        var valueToSetValue2 = "data"
-        var listParams = listOf(keyToSet, valueToSetIndex1, valueToSetValue1, valueToSetIndex2, valueToSetValue2)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestIncr = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSetIndex1 = "1"
+        val valueToSetValue1 = "data"
+        val valueToSetIndex2 = "2"
+        val valueToSetValue2 = "data"
+        val listParams = listOf(keyToSet, valueToSetIndex1, valueToSetValue1, valueToSetIndex2, valueToSetValue2)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestIncr = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("ZADD", paramsRequestSet)
-        var datos = processCommand.processCommand("GET", paramsRequestIncr)
+        val datos = processCommand.processCommand("GET", paramsRequestIncr)
         Assert.assertTrue(datos.response.equals("{\"1\":\"data\",\"2\":\"data\"}"))
     }
 
     @Test
     fun testNumberElementsZCARD() {
-        var keyToSet = "key"
-        var valueToSetIndex1 = "1"
-        var valueToSetValue1 = "data"
-        var valueToSetIndex2 = "2"
-        var valueToSetValue2 = "data"
-        var listParams = listOf(keyToSet, valueToSetIndex1, valueToSetValue1, valueToSetIndex2, valueToSetValue2)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestZcard = ParamsRequest(listOf(keyToSet))
+        val keyToSet = "key"
+        val valueToSetIndex1 = "1"
+        val valueToSetValue1 = "data"
+        val valueToSetIndex2 = "2"
+        val valueToSetValue2 = "data"
+        val listParams = listOf(keyToSet, valueToSetIndex1, valueToSetValue1, valueToSetIndex2, valueToSetValue2)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestZcard = ParamsRequest(listOf(keyToSet))
         processCommand.processCommand("ZADD", paramsRequestSet)
-        var datos = processCommand.processCommand("ZCARD", paramsRequestZcard)
+        val datos = processCommand.processCommand("ZCARD", paramsRequestZcard)
         Assert.assertTrue(datos.response.equals("2"))
     }
 
     @Test
     fun testRankElementZRANK() {
-        var keyToSet = "key"
-        var valueToSetIndex1 = "2"
-        var valueToSetValue1 = "data uno"
-        var valueToSetIndex2 = "1"
-        var valueToSetValue2 = "data dos"
-        var listParams = listOf(keyToSet, valueToSetIndex1, valueToSetValue1, valueToSetIndex2, valueToSetValue2)
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestZrank = ParamsRequest(listOf(keyToSet, "data uno"))
+        val keyToSet = "key"
+        val valueToSetIndex1 = "2"
+        val valueToSetValue1 = "data uno"
+        val valueToSetIndex2 = "1"
+        val valueToSetValue2 = "data dos"
+        val listParams = listOf(keyToSet, valueToSetIndex1, valueToSetValue1, valueToSetIndex2, valueToSetValue2)
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestZrank = ParamsRequest(listOf(keyToSet, "data uno"))
         processCommand.processCommand("ZADD", paramsRequestSet)
-        var datos = processCommand.processCommand("ZRANK", paramsRequestZrank)
+        val datos = processCommand.processCommand("ZRANK", paramsRequestZrank)
         Assert.assertTrue(datos.response.equals("1"))
     }
 
     @Test
     fun testGetElementsByRangeZRange() {
-        var keyToSet = "key"
-        var valueToSetIndex1 = "2"
-        var valueToSetValue1 = "data dos"
-        var valueToSetIndex2 = "1"
-        var valueToSetValue2 = "data uno"
-        var valueToSetIndex3 = "3"
-        var valueToSetValue3 = "data tres"
-        var listParams = listOf(
+        val keyToSet = "key"
+        val valueToSetIndex1 = "2"
+        val valueToSetValue1 = "data dos"
+        val valueToSetIndex2 = "1"
+        val valueToSetValue2 = "data uno"
+        val valueToSetIndex3 = "3"
+        val valueToSetValue3 = "data tres"
+        val listParams = listOf(
             keyToSet,
             valueToSetIndex1,
             valueToSetValue1,
@@ -180,10 +180,10 @@ class RedisChallengeApplicationTests {
             valueToSetIndex3,
             valueToSetValue3
         )
-        var paramsRequestSet = ParamsRequest(listParams)
-        var paramsRequestZrange = ParamsRequest(listOf(keyToSet, "0","1"))
+        val paramsRequestSet = ParamsRequest(listParams)
+        val paramsRequestZrange = ParamsRequest(listOf(keyToSet, "0","1"))
         processCommand.processCommand("ZADD", paramsRequestSet)
-        var datos = processCommand.processCommand("ZRANGE", paramsRequestZrange)
+        val datos = processCommand.processCommand("ZRANGE", paramsRequestZrange)
         Assert.assertTrue(datos.response.equals("data uno"))
     }
 
